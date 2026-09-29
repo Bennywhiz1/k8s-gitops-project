@@ -1,0 +1,30 @@
+# Apply this to a cluster that already has ArgoCD installed:
+#   kubectl apply -f argocd/application.yaml
+#
+# This tells ArgoCD: "watch this GitHub repo's helm-chart/ folder, and keep
+# the cluster's actual state in sync with whatever's committed there." Once
+# applied, deploying a change is just `git push` - no manual kubectl or helm
+# commands needed for day-to-day updates.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: k8s-autoscaling-demo
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/Bennywhiz1/k8s-gitops-project.git
+    targetRevision: main
+    path: helm-chart
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+
+  syncPolicy:
+    automated:
+      prune: true       # remove resources that are deleted from the repo
+      selfHeal: true    # revert any manual kubectl changes back to match the repo
+    syncOptions:
+      - CreateNamespace=true

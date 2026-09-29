@@ -1,0 +1,28 @@
+# Used with the community kube-prometheus-stack chart:
+#   helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+#   helm install monitoring prometheus-community/kube-prometheus-stack \
+#     -f monitoring/prometheus-values.yaml -n monitoring --create-namespace
+#
+# Trimmed down from the chart's defaults for a local Kind/Minikube cluster -
+# a real production install would tune retention, storage, and resource
+# requests differently.
+
+grafana:
+  enabled: true
+  adminPassword: admin  # local demo only - never do this in a real cluster
+  service:
+    type: ClusterIP
+
+prometheus:
+  prometheusSpec:
+    retention: 6h
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 250m
+        memory: 512Mi
+
+alertmanager:
+  enabled: false  # not needed for a portfolio demo; a real deployment would enable this

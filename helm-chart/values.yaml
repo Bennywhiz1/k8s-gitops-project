@@ -1,0 +1,44 @@
+# Default values for k8s-autoscaling-demo.
+
+replicaCount: 2
+
+image:
+  repository: k8s-autoscaling-demo
+  # For Kind: build locally and `kind load docker-image` - no registry needed.
+  # For a real registry (Docker Hub / ECR later), set this to the full path
+  # and update tag on each release.
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 8
+  targetCPUUtilizationPercentage: 50
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8000
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 8000
+  initialDelaySeconds: 5
+  periodSeconds: 5
