@@ -15,7 +15,7 @@ from pydantic import BaseModel
 app = FastAPI(title="K8s Autoscaling Demo API", version="1.0.0")
 
 POD_NAME = os.getenv("POD_NAME", socket.gethostname())
-
+# my comment
 
 class WorkResponse(BaseModel):
     pod_name: str
