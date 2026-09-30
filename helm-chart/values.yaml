@@ -7,7 +7,7 @@ image:
   # For Kind: build locally and `kind load docker-image` - no registry needed.
   # For a real registry (Docker Hub / ECR later), set this to the full path
   # and update tag on each release.
-  tag: "latest"
+  tag: "283645628130a9514937cb65ef9bc8deab546d0d"
   pullPolicy: IfNotPresent
 
 service:
